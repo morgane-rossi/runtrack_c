@@ -8,6 +8,7 @@ char *my_strcp(char *dest, char *source)
         dest[indice] =source[indice];
         indice++ ;
     }
+    dest[indice] = '\0';
     return dest;
 }
 

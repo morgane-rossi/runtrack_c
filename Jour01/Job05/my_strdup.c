@@ -18,18 +18,31 @@ char* my_strdup(char *source)
     int taille_chaine = my_strlen(source);
 
     // DESTINATION EST UN POINTEUR
-    char* destination = malloc(sizeof(char) * taille_chaine+1);
-    destination = source;
+    char* destination = malloc(sizeof(char) * (taille_chaine+1));
 
-   printf("%s\n", destination);
+    if (destination == NULL)
+    {
+        printf("Erreur allocation memoire\n");
+        return NULL;
+    }
 
-    free(destination);
+    for (int c = 0 ; c <= taille_chaine ; c++){
+        destination[c] = source[c];
+    }
+//   printf("%s\n", destination);
+
+    return destination ;
 }
 
 int main()
 {
     char pilou [] = "piloupiloupilou";
-    my_strdup(pilou);
+    char *copie = my_strdup(pilou);
+    if (copie != NULL)
+    {
+        printf("%s\n", copie);
+    }
+    free(copie);
 
     return 0 ;
 }
