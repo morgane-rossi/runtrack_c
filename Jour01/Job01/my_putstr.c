@@ -8,7 +8,7 @@ void my_putchar (char c)
 }
 
 
-void my_putstr(char str[])
+void my_putstr(char *str)
 {
     int index = 0 ;
     while(str[index] != '\0')
