@@ -1,74 +1,66 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-struct album
+typedef struct album
 {
-    char* titre;
-    char* auteur;
-    unsigned int annee;
-};
+    char *titre;
+    char *auteur;
+    unsigned annee ;
+} Album;
 
-typedef struct album Album ;
 
-Album* realloc_album(Album *albums, int size, int newsize)
+void print_album(Album *alb)
 {
-    // allouer correctement un nouveau tableau à la nouvelle taille
-    Album* destination = malloc(newsize);
-    // copier l'ancien tableau dans le nouveau
-    destination = albums;
-
-    // libérer la mémoire
-    free(albums);
-    return destination;
+    printf("%s by %s released in %d\n", alb->titre, alb->auteur, alb->annee);
 }
 
-
-void print_album(Album *album)
+Album *realloc_album(Album *albums, int size, int new_size)
 {
-    printf("titre : %s, auteur : %s, année : %d\n", album->titre, album->auteur, album->annee);
+    Album *tab_albums = malloc(new_size * sizeof(Album)) ;
+
+    if (tab_albums == NULL)
+    {
+        printf("erreur\n");
+        exit(1) ;
+    }
+
+    for (int i = 0 ; i < size ; i++)
+    {
+        tab_albums[i].annee = albums[i].annee;
+
+        // deppcopy pour éviter les problèmes
+        tab_albums[i].auteur = strdup(albums[i].auteur) ;
+        tab_albums[i].titre = strdup(albums[i].titre);
+    }
+    return tab_albums ;
 }
 
 
 int main()
 {
-    struct  album puppets;
-    puppets.titre = "Master of Puppets";
-    puppets.auteur = "Metallica";
-    puppets.annee = 1986 ;
+    Album my_albums[] = {
+        {"Master of Puppets", "Metallica", 1986},
+        {"Demon Days", "Gorillaz", 2005},
+        {"Leisure", "Blur", 1991},
+        {"Dry", "PJ Harvey", 1992}        
+};
+    int taille = sizeof(my_albums) / sizeof(my_albums[0]) ;
 
-    struct album zanaka;
-    zanaka.titre = "Zanaka";
-    zanaka.auteur = "Jain";
-    zanaka.annee = 2015;
-
-    struct album ddays;
-    ddays.titre = "Demon Days";
-    ddays.auteur = "Gorillaz";
-    ddays.annee = 2005;
-
-    struct album asa;
-    asa.titre = "Beautiful Imperfection";
-    asa.auteur = "Asa";
-    asa.annee = 2010;
-
-    struct album akh ;
-    akh.titre = "Meteque et Mat";
-    akh.auteur = "Akhenaton";
-    akh.annee = 1995;
-
-    Album m_albums[] = {puppets, zanaka, ddays, asa, akh};
-    int taille = 5 ;
-
-    int taillealb = sizeof(m_albums);
-
-    Album *new_albums = realloc_album(m_albums, sizeof(m_albums), sizeof(m_albums));
+    Album *newalbs = realloc_album(my_albums, taille, taille);
 
     for (int i = 0 ; i < taille ; i++)
     {
-        print_album(&new_albums[i]);
+        print_album(&newalbs[i]);
     }
 
-    free(new_albums);
+    // libérer
+    for(int j = 0 ; j < taille ; j++)
+    {
+        free(newalbs[j].titre);
+        free(newalbs[j].auteur);
+    }
+    free(newalbs);
 
     return 0 ;
 }

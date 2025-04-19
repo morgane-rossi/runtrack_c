@@ -14,24 +14,18 @@ int my_strlen(char * str)
 
 char* my_strdup(char *source)
 {
-    // allouer mémoire nécessaire pour une copie de la chaîne entrante
-    int taille_chaine = my_strlen(source);
-
-    // DESTINATION EST UN POINTEUR
-    char* destination = malloc(sizeof(char) * (taille_chaine+1));
-
-    if (destination == NULL)
+    char *copie = malloc(sizeof(char) *(my_strlen(source) + 1) );
+    if (copie == NULL){
+        return NULL ;
+    }
+    int indice = 0 ;
+    while (source[indice] != '\0')
     {
-        printf("Erreur allocation memoire\n");
-        return NULL;
+        copie[indice] = source[indice];
+        indice ++ ;
     }
-
-    for (int c = 0 ; c <= taille_chaine ; c++){
-        destination[c] = source[c];
-    }
-//   printf("%s\n", destination);
-
-    return destination ;
+    copie[indice] = '\0';
+    return copie ;
 }
 
 int main()
